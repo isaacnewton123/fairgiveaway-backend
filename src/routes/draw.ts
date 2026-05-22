@@ -1,7 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { Giveaway, redis } from '../db';
 
-export function drawRoutes(): Elysia {
+export function drawRoutes() {
   return new Elysia()
     .post(
       '/api/draw/search',

@@ -29,13 +29,24 @@ RUN apt-get update && apt-get install -y \
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-WORKDIR /app
+# Hugging Face Spaces run on port 7860
+EXPOSE 7860
 
-COPY package.json bun.lock ./
+# The oven/bun image already has a user with UID 1000 (usually named 'bun').
+# We can just use the numeric UID directly to satisfy HF Spaces.
+
+# Set working directory and ownership
+WORKDIR /app
+RUN chown -R 1000:1000 /app
+
+# Switch to non-root user
+USER 1000
+
+# Copy dependencies
+COPY --chown=1000:1000 package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-COPY . .
-
-EXPOSE 7860
+# Copy application code
+COPY --chown=1000:1000 . .
 
 CMD ["bun", "run", "src/index.ts"]
