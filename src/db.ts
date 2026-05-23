@@ -18,6 +18,7 @@ const winnerSchema = new mongoose.Schema(
     status: { type: String, enum: ["verified", "failed"], default: "verified" },
     avatarUrl: { type: String },
     commentProofUrl: { type: String },
+    failReason: { type: String },
   },
   { _id: false },
 );

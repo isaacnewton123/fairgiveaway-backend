@@ -11,6 +11,8 @@ export interface VerificationResult {
   passedAge: boolean;
   passedActivity: boolean;
   passedComment: boolean;
+  actualAgeMonths?: number;
+  actualPosts?: number;
 }
 
 export interface VerificationConfig {

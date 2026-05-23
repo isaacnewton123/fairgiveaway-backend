@@ -37,9 +37,11 @@ function applyGraphQLData(
         `[scraper] GraphQL Age Check: created=${u.created_at}, diff=${diffMonths}, min=${config.minMonths}`,
       );
       result.passedAge = diffMonths >= config.minMonths;
+      result.actualAgeMonths = diffMonths;
     } else {
       console.log(`[scraper] GraphQL Age Check: created_at missing`);
       result.passedAge = false;
+      result.actualAgeMonths = 0;
     }
   }
   if (config.mustActivity && typeof config.minPosts === "number") {
@@ -47,6 +49,7 @@ function applyGraphQLData(
       `[scraper] GraphQL Post Check: posts=${u.statuses_count}, min=${config.minPosts}`,
     );
     result.passedActivity = (u.statuses_count || 0) >= config.minPosts;
+    result.actualPosts = u.statuses_count || 0;
   }
 }
 
@@ -127,8 +130,10 @@ async function applyDOMFallback(
             `[scraper] DOM Age Check: parsed=${dom.joinDateText}, diff=${diffMonths}, min=${config.minMonths}`,
           );
           result.passedAge = diffMonths >= config.minMonths;
+          result.actualAgeMonths = diffMonths;
         } else {
           console.log(`[scraper] DOM Age Check: failed to parse date`);
+          result.actualAgeMonths = 0;
         }
       } else {
         console.log(`[scraper] DOM Age Check: joinDateText empty`);
@@ -140,6 +145,7 @@ async function applyDOMFallback(
       typeof config.minPosts === "number"
     ) {
       result.passedActivity = dom.posts >= config.minPosts;
+      result.actualPosts = dom.posts;
     }
   } catch (err) {
     console.error("[scraper] DOM Fallback failed", err);

@@ -313,6 +313,7 @@ export function xRoutes() {
             status: t.String(),
             avatarUrl: t.Optional(t.String()),
             commentProofUrl: t.Optional(t.String()),
+            failReason: t.Optional(t.String()),
           }),
         ),
       }),
